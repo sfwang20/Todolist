@@ -13,12 +13,15 @@ if ($_SESSION["loggedin"] == false){
   </div>
   <div id="panel">
     <h1>Todo List</h1>
+    <hr>
     <div id="todolist">
       <ul>
-        <li class="new">
-          <div class="checkbox"></div>
-          <div class="content" contenteditable="true"></div>
-        </li>
+        <li class='new'>
+          <div class="actions">
+            <div class="addtodo">+</div>
+          </div>
+          <div class="content" contenteditable="true" placeholder="Add Something..."></div>
+      </li>
       </ul>
     </div>
   </div>
