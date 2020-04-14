@@ -5,7 +5,7 @@
     <title>Todo list</title>
     <!--將bootstrap加進來 順序要放在前面,後面自己寫的main才會覆蓋掉它-->
     <link rel="stylesheet" href="css/jquery-ui.min.css">
-    <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/main.css">
 
     <!--將jQuery和自己寫的js加進來-->
