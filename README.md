@@ -28,8 +28,4 @@ http://todolist.shinfu.website
 * HTML/CSS/Javascript(jQuery)
 * PHP/MySQL
 
-### DEMO
 
-----
-
-![todo-list-demo](/todo-list-demo.gif)
