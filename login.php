@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION["loggedin"] == true){
+  header("location: index.php");
+  exit;
+}
+
 include ('../db_todo.php');
 
 try {
@@ -9,42 +15,41 @@ try {
     exit;
 }
 
-session_start();
-
 $username = $password = "";
 $username_err = $password_err = "";
- 
+
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
- 
+
     if (empty(trim($_POST["username"]))){
         $username_err = "Please enter username.";
     } else {
         $username = trim($_POST["username"]);
     }
-    
+
     if (empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
     } else {
         $password = trim($_POST["password"]);
     }
-    
+
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
 
         $sql = "SELECT * FROM users WHERE username = :username";
         $statement = $pdo->prepare($sql);
         $statement -> bindValue(':username', $_POST["username"], PDO::PARAM_STR);
-        $result = $statement->execute();
+        $statement->execute();
         $user = $statement -> fetch(PDO::FETCH_ASSOC);
-        if ($result) {
+
+        if (!empty($user)) {
             if ($user["password"] == $_POST["password"]) {
-                session_start();            
+
                 // Store data in session variables
                 $_SESSION["loggedin"] = true;
                 $_SESSION["id"] = $user['id'];
-                $_SESSION["username"] = $user['username'];    
-                                        
+                $_SESSION["username"] = $user['username'];
+
                 // Redirect user to index page
                 header("location:index.php");
             } else {
@@ -57,15 +62,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
   }
 ?>
 
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px; }
+    body{ font: 14px sans-serif;
+          background-image: url(image/london.jpg);
+          background-size: cover;
+          background-repeat: no-repeat; }
+    .wrapper{ width: 350px; padding: 20px; margin: 0 auto; position: relative; top:70px; background-color: AliceBlue;}
     </style>
 </head>
 <body>
@@ -77,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label>Username</label>
                 <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
                 <span class="help-block"><?php echo $username_err; ?></span>
-            </div>    
+            </div>
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control">
@@ -88,6 +96,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
         </form>
-    </div>    
+    </div>
 </body>
 </html>
