@@ -1,4 +1,10 @@
 <?php
+session_start();
+if ($_SESSION["loggedin"] == true){
+  header("location: index.php");
+  exit;
+}
+
 include ('../db_todo.php');
 // connect to db
 try {
@@ -8,11 +14,12 @@ try {
     echo "Database connection failed.";
     exit;
 }
- 
+
+
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
 $username_err = $password_err = $confirm_password_err = "";
- 
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -25,35 +32,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $statement -> bindValue(':username', $_POST["username"], PDO::PARAM_STR);
         $statement -> execute();
         $result = $statement ->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($result['username'] == $_POST['username']) {
             $username_err = "This username is already taken.";
         } else {
              $username = trim($_POST["username"]);
         }
     }
-    
+
     // Validate password
     if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
+        $password_err = "Please enter a password.";
     } elseif(strlen(trim($_POST["password"])) < 6){
         $password_err = "Password must have atleast 6 characters.";
     } else{
         $password = trim($_POST["password"]);
     }
-    
+
     // Validate confirm password
     if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm password.";     
+        $confirm_password_err = "Please confirm password.";
     } else{
         $confirm_password = trim($_POST["confirm_password"]);
         if(empty($password_err) && ($password != $confirm_password)){
             $confirm_password_err = "Password did not match.";
         }
     }
-    
+
     if(empty($username_err) && empty($password_err) && empty($confirm_password_err)){
-        
+
         $sql = "INSERT INTO users (username, `password`) VALUES (:username, :password)";
         $statement = $pdo->prepare($sql);
         $statement -> bindValue(':username', $_POST['username'], PDO::PARAM_STR);
@@ -67,7 +74,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,8 +84,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <style type="text/css">
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 350px; padding: 20px; }
+        body{ font: 14px sans-serif;
+              background-image: url(image/london.jpg);
+              background-size: cover;
+              background-repeat: no-repeat; }
+        .wrapper{ width: 350px; padding: 20px; margin: 0 auto; position: relative; top:70px; background-color: AliceBlue;}
     </style>
 
     <div class="wrapper">
@@ -89,7 +99,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <label>Username</label>
                 <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
                 <span class="help-block"><?php echo $username_err; ?></span>
-            </div>    
+            </div>
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
                 <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
@@ -106,6 +116,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <p>Already have an account? <a href="login.php">Login here</a>.</p>
         </form>
-    </div>    
+    </div>
 </body>
 </html>
