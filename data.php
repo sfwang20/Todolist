@@ -3,10 +3,10 @@ include ('../db_todo.php');
 session_start();
 
 try {
-    $pdo = new PDO ("mysql:host=$db[host]; dbname=$db[dbname]; port=$db[port]; 
+    $pdo = new PDO ("mysql:host=$db[host]; dbname=$db[dbname]; port=$db[port];
     charset=$db[charset]",$db['username'],$db['password']);
 } catch(PDOException $e) {
-    echo "Database Connection failed. data.php";
+    echo "Database Connection failed.";
     echo $e;
     exit;
 }
