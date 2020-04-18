@@ -1,7 +1,7 @@
 <?php include ('header.php') ?>
 <?php include ('data.php') ?>
 <?php
-session_start();
+
 if ($_SESSION["loggedin"] == false){
   header("location: register.php");
   exit;
@@ -17,11 +17,11 @@ if ($_SESSION["loggedin"] == false){
     <div id="todolist">
       <ul>
         <li class='new'>
-          <div class="actions">
-            <div class="addtodo">+</div>
-          </div>
-          <div class="content" contenteditable="true" placeholder="Add Something..."></div>
-      </li>
+            <div class="actions">
+              <div class="addtodo">+</div>
+            </div>
+            <div class="content" contenteditable="true" placeholder="Add Something..."></div>
+        </li>
       </ul>
     </div>
   </div>
