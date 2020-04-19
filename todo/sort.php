@@ -19,6 +19,6 @@ foreach($_POST['orderpair'] as $key => $orderpair) {
     $result = $statement -> execute();
 }
 
-if ($result) {
+if (!$result) {
     echo 'error';
 }
