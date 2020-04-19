@@ -1,8 +1,8 @@
 $(document).ready(function(){              //$(this)等同$(e.currentTarget)
-  
+
   var source = $('#todolist_template').html();
   var todoTemplate = Handlebars.compile(source);
-  
+
   //prepare all todo list items
   var todolistUI = '';
   $.each(todos, function (index, todo) {    //data.php宣告的todos  每一次todos都會丟進f 索引/值
@@ -12,7 +12,7 @@ $(document).ready(function(){              //$(this)等同$(e.currentTarget)
 
   $('#todolist')
   .on('dblclick', '.content', function(e){            //edit功能
-      $(this).prop('contenteditable', true).focus(); 
+      $(this).prop('contenteditable', true).focus();
   })
   .on('blur', '.content', function(e){               //blur事件會存在e裡面  因為同樣是監聽blur所以寫在一起
     var isNew = $(this).closest('li').is('.new');
@@ -22,7 +22,7 @@ $(document).ready(function(){              //$(this)等同$(e.currentTarget)
       todo = todo.trim();               //清掉空白,以防user沒輸入
 
       if (todo.length > 0) {
-        var order = $('#todolist').find('li:not(.new').length + 1;
+        var order = $('#todolist').find('li:not(.new)').length + 1;
 
         //AJAX: create API  傳3個參數:到達的網址/要傳的資料/成功後要做的事
         $.post("todo/create.php", {content: todo, order: order},
@@ -38,16 +38,16 @@ $(document).ready(function(){              //$(this)等同$(e.currentTarget)
         );
       }
     $(this).empty();                   //把輸入的內容清掉
-    } 
+    }
 
     //update
     else {                               //若不是新的,把可編輯關掉
         //AJAX CALL
-        var id = $(this).closest('li').data('id');    //準備好要更新的id和content 
+        var id = $(this).closest('li').data('id');    //準備好要更新的id和content
         var content = $(this).text();
         $.post("todo/update.php", {id: id, content: content},
         function (data, textStatus, jqXHR) {});
-        $(this).prop('contenteditable', false);  
+        $(this).prop('contenteditable', false);
     }
   })
   .on('click', '.delete', function(e){                  //delete
@@ -58,7 +58,7 @@ $(document).ready(function(){              //$(this)等同$(e.currentTarget)
       $.post("todo/delete.php", {id: id},
       function (data, textStatus, jqXHR) {
         $(e.currentTarget).closest('li').remove();    //front-end的刪除  不一定要用f接 在外面做掉也可(像update)
-      });  
+      });
     }
   })
   .on('click', '.checkbox', function(e){
@@ -68,7 +68,7 @@ $(document).ready(function(){              //$(this)等同$(e.currentTarget)
     function (data, textStatus, jqXHR) {
       $(e.currentTarget).closest('li').toggleClass('complete');
     });
-    
+
   });
 
   $('#todolist').find('ul').sortable({
